@@ -1,0 +1,20 @@
+[package]
+name = "kit-timetable-server"
+version = "0.1.0"
+authors = ["f0reachARR <f0reach@f0reach.me>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = "0.4.6"
+juniper = "0.15.1"
+#elastic = "0.21.0-pre.5"
+#elastic_derive = "0.21.0-pre.5"
+elasticsearch = "7.10.1-alpha.1"
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.0", features = ["full"] }
+futures = "*"
+thiserror = "1.0.23"
+anyhow = "1.0.38"
