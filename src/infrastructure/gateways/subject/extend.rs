@@ -118,51 +118,51 @@ impl TryFrom<GetResponse<dto::SubjectDocument>> for SubjectEntity {
     type Error = anyhow::Error;
 
     fn try_from(res: GetResponse<dto::SubjectDocument>) -> Result<Self, Self::Error> {
-        Ok(SubjectEntity {
-            id: res._id.parse()?,
-            title: res._source.title,
-            categories: res
-                ._source
-                .categories
-                .into_iter()
-                .map(|item| SubjectCategory::try_from(item))
-                .collect::<Result<Vec<_>, _>>()?,
-            instructors: res
-                ._source
-                .instructors
-                .into_iter()
-                .map(|item| SubjectInstructor::from(item))
-                .collect(),
-            attachments: res._source.attachments.map_or(Default::default(), |n| {
-                HashMap::from_iter(n.into_iter().map(|v| (v.key, v.name)))
-            }),
-            flags: res
-                ._source
-                .flags
-                .into_iter()
-                .map(|v| SubjectFlag::from_str(v.as_str()))
-                .collect::<Result<Vec<_>, _>>()?,
-            outline: res._source.outline,
-            purpose: res._source.purpose,
-            plans: res
-                ._source
-                .plans
-                .into_iter()
-                .map(|item| SubjectClassPlan::from(item))
-                .collect(),
-            requirement: res._source.requirement,
-            point: res._source.point,
-            textbook: res._source.textbook,
-            grading_policy: res._source.grading_policy,
-            remark: res._source.remark,
-            research_plan: res._source.research_plan,
-            timetable_id: res._source.timetable_id,
-            course_id: res._source.course_id,
-            credits: res._source.credits,
-            subject_type: res._source.subject_type,
-            code: res._source.code,
-            class_name: res._source.class_name,
-            goal: res._source.goal.map(|n| SubjectGoal::from(n)),
-        })
+        if let Some(_source) = res._source {
+            Ok(SubjectEntity {
+                id: res._id.parse()?,
+                title: _source.title,
+                categories: _source
+                    .categories
+                    .into_iter()
+                    .map(|item| SubjectCategory::try_from(item))
+                    .collect::<Result<Vec<_>, _>>()?,
+                instructors: _source
+                    .instructors
+                    .into_iter()
+                    .map(|item| SubjectInstructor::from(item))
+                    .collect(),
+                attachments: _source.attachments.map_or(Default::default(), |n| {
+                    HashMap::from_iter(n.into_iter().map(|v| (v.key, v.name)))
+                }),
+                flags: _source
+                    .flags
+                    .into_iter()
+                    .map(|v| SubjectFlag::from_str(v.as_str()))
+                    .collect::<Result<Vec<_>, _>>()?,
+                outline: _source.outline,
+                purpose: _source.purpose,
+                plans: _source
+                    .plans
+                    .into_iter()
+                    .map(|item| SubjectClassPlan::from(item))
+                    .collect(),
+                requirement: _source.requirement,
+                point: _source.point,
+                textbook: _source.textbook,
+                grading_policy: _source.grading_policy,
+                remark: _source.remark,
+                research_plan: _source.research_plan,
+                timetable_id: _source.timetable_id,
+                course_id: _source.course_id,
+                credits: _source.credits,
+                subject_type: _source.subject_type,
+                code: _source.code,
+                class_name: _source.class_name,
+                goal: _source.goal.map(|n| SubjectGoal::from(n)),
+            })
+        } else {
+            Err(anyhow!("Source not found"))
+        }
     }
 }
