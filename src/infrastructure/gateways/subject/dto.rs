@@ -62,17 +62,17 @@ pub struct SubjectDocument {
     pub instructors: Vec<SubjectInstructorDoc>,
     pub attachments: Option<Vec<SubjectAttachmentDoc>>,
     pub flags: Vec<String>,
-    pub outline: String,
-    pub purpose: String,
+    pub outline: Option<String>,
+    pub purpose: Option<String>,
     pub plans: Vec<SubjectClassPlanDoc>,
-    pub requirement: String,
-    pub point: String,
-    pub textbook: String,
+    pub requirement: Option<String>,
+    pub point: Option<String>,
+    pub textbook: Option<String>,
     #[serde(rename = "gradingPolicy")]
-    pub grading_policy: String,
-    pub remark: String,
+    pub grading_policy: Option<String>,
+    pub remark: Option<String>,
     #[serde(rename = "researchPlan")]
-    pub research_plan: String,
+    pub research_plan: Option<String>,
 
     #[serde(rename = "timetableId")]
     pub timetable_id: Option<i32>,

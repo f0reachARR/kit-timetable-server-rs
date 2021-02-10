@@ -11,6 +11,7 @@ use std::convert::TryFrom;
 use std::pin::Pin;
 
 mod extend;
+mod extend_test;
 
 pub struct SubjectGateway<'a>(&'a Elasticsearch, &'a str);
 

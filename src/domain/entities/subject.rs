@@ -24,13 +24,13 @@ pub struct SubjectGoal {
     pub evaluations: Vec<SubjectGoalEvaluation>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SubjectFixedSchedule {
     pub date: i32,
     pub hour: i32,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum SubjectSchedule {
     Intensive,
     Fixed(Vec<SubjectFixedSchedule>),
@@ -49,7 +49,7 @@ pub struct SubjectCategory {
     pub schedule: SubjectSchedule,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum SubjectFlag {
     Internship,
     IGP,

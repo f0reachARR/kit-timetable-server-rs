@@ -140,19 +140,19 @@ impl TryFrom<GetResponse<dto::SubjectDocument>> for SubjectEntity {
                     .into_iter()
                     .map(|v| SubjectFlag::from_str(v.as_str()))
                     .collect::<Result<Vec<_>, _>>()?,
-                outline: _source.outline,
-                purpose: _source.purpose,
+                outline: _source.outline.unwrap_or(Default::default()),
+                purpose: _source.purpose.unwrap_or(Default::default()),
                 plans: _source
                     .plans
                     .into_iter()
                     .map(|item| SubjectClassPlan::from(item))
                     .collect(),
-                requirement: _source.requirement,
-                point: _source.point,
-                textbook: _source.textbook,
-                grading_policy: _source.grading_policy,
-                remark: _source.remark,
-                research_plan: _source.research_plan,
+                requirement: _source.requirement.unwrap_or(Default::default()),
+                point: _source.point.unwrap_or(Default::default()),
+                textbook: _source.textbook.unwrap_or(Default::default()),
+                grading_policy: _source.grading_policy.unwrap_or(Default::default()),
+                remark: _source.remark.unwrap_or(Default::default()),
+                research_plan: _source.research_plan.unwrap_or(Default::default()),
                 timetable_id: _source.timetable_id,
                 course_id: _source.course_id,
                 credits: _source.credits,
