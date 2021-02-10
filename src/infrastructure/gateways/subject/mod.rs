@@ -21,11 +21,11 @@ impl<'a> SubjectGateway<'a> {
     }
 }
 
-impl<'a> SubjectRepository<'a> for SubjectGateway<'a> {
-    fn get_by_id(
-        &'a self,
+impl<'a> SubjectRepository for SubjectGateway<'a> {
+    fn get_by_id<'b>(
+        &'b self,
         id: u32,
-    ) -> Pin<Box<dyn Future<Output = Result<SubjectEntity, anyhow::Error>> + 'a>> {
+    ) -> Pin<Box<dyn Future<Output = Result<SubjectEntity, anyhow::Error>> + 'b>> {
         async move {
             let res = self
                 .0
