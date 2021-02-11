@@ -3,3 +3,9 @@ pub mod repositories {
 
     pub use subject::SubjectRepository;
 }
+
+pub mod usecases {
+    mod subject;
+
+    pub use subject::SubjectUsecase;
+}
