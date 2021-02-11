@@ -3,3 +3,7 @@ pub mod gateways {
 
     pub use subject::SubjectGateway;
 }
+
+pub mod presenters {
+    pub mod subject;
+}
