@@ -9,3 +9,9 @@ pub mod usecases {
 
     pub use subject::SubjectUsecase;
 }
+
+pub mod interactors {
+    mod subject;
+
+    pub use subject::SubjectInteractor;
+}
