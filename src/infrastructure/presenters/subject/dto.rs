@@ -1,50 +1,50 @@
-use juniper::*;
+use async_graphql::*;
 
-#[derive(Debug, GraphQLObject)]
+#[derive(Debug, SimpleObject)]
 pub struct GqlSubjectClassPlan {
     pub topic: String,
     pub content: Option<String>,
 }
 
-#[derive(Debug, GraphQLObject)]
+#[derive(Debug, SimpleObject)]
 pub struct GqlSubjectInstructor {
     pub name: String,
     pub id: Option<String>,
 }
 
-#[derive(Debug, GraphQLObject)]
+#[derive(Debug, SimpleObject)]
 pub struct GqlSubjectGoalEvaluation {
     pub label: String,
     pub description: String,
 }
 
-#[derive(Debug, GraphQLObject)]
+#[derive(Debug, SimpleObject)]
 pub struct GqlSubjectGoal {
     pub description: String,
     pub evaluations: Vec<GqlSubjectGoalEvaluation>,
 }
 
-#[derive(Debug, PartialEq, GraphQLObject)]
+#[derive(Debug, PartialEq, SimpleObject)]
 pub struct GqlSubjectFixedSchedule {
     pub date: i32,
     pub hour: i32,
 }
 
-#[derive(Debug, PartialEq, GraphQLEnum)]
+#[derive(Debug, Enum, Copy, Clone, Eq, PartialEq)]
 pub enum GqlSubjectScheduleType {
     Intensive,
     Fixed,
     Unknown,
 }
 
-#[derive(Debug, GraphQLObject)]
+#[derive(Debug, SimpleObject)]
 pub struct GqlSubjectSchedule {
     #[graphql(name = "type")]
     pub schedule_type: GqlSubjectScheduleType,
     pub days: Vec<GqlSubjectFixedSchedule>,
 }
 
-#[derive(Debug, GraphQLObject)]
+#[derive(Debug, SimpleObject)]
 pub struct GqlSubjectCategory {
     pub faculty: Option<String>,
     pub field: Option<String>,
@@ -56,7 +56,7 @@ pub struct GqlSubjectCategory {
     pub schedule: GqlSubjectSchedule,
 }
 
-#[derive(Debug, PartialEq, GraphQLEnum)]
+#[derive(Debug, Enum, Copy, Clone, Eq, PartialEq)]
 pub enum GqlSubjectFlag {
     Internship,
     IGP,
@@ -68,13 +68,13 @@ pub enum GqlSubjectFlag {
     Lottery,
 }
 
-#[derive(Debug, GraphQLObject)]
+#[derive(Debug, SimpleObject)]
 pub struct GqlSubjectAttachment {
     pub key: String,
     pub name: String,
 }
 
-#[derive(Debug, GraphQLObject)]
+#[derive(Debug, SimpleObject)]
 pub struct GqlSubjectDto {
     pub id: i32,
     pub title: String,
