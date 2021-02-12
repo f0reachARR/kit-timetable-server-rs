@@ -1,7 +1,7 @@
 use crate::domain::entities::{
     subject::{
-        SubjectCategory, SubjectClassPlan, SubjectFlag, SubjectGoal, SubjectGoalEvaluation,
-        SubjectInstructor, SubjectSchedule,
+        SubjectCategory, SubjectClassPlan, SubjectFixedSchedule, SubjectFlag, SubjectGoal,
+        SubjectGoalEvaluation, SubjectInstructor, SubjectSchedule,
     },
     SubjectEntity,
 };
@@ -13,16 +13,28 @@ pub fn test_dto() {
     let entity = SubjectEntity {
         id: 1,
         title: String::from("title"),
-        categories: vec![SubjectCategory {
-            faculty: Some(String::from("faculty")),
-            field: Some(String::from("field")),
-            program: Some(String::from("program")),
-            category: Some(String::from("category")),
-            semester: String::from("semester"),
-            available: true,
-            year: vec![1000],
-            schedule: SubjectSchedule::Intensive,
-        }],
+        categories: vec![
+            SubjectCategory {
+                faculty: Some(String::from("faculty")),
+                field: Some(String::from("field")),
+                program: Some(String::from("program")),
+                category: Some(String::from("category")),
+                semester: String::from("semester"),
+                available: true,
+                year: vec![1000],
+                schedule: SubjectSchedule::Fixed(vec![SubjectFixedSchedule { date: 1, hour: 1 }]),
+            },
+            SubjectCategory {
+                faculty: Some(String::from("faculty")),
+                field: Some(String::from("field")),
+                program: Some(String::from("program")),
+                category: Some(String::from("category")),
+                semester: String::from("semester"),
+                available: true,
+                year: vec![1000],
+                schedule: SubjectSchedule::Intensive,
+            },
+        ],
         instructors: vec![
             SubjectInstructor {
                 name: String::from("ins1"),
@@ -74,19 +86,34 @@ pub fn test_dto() {
     let expected = GqlSubjectDto {
         id: 1,
         title: String::from("title"),
-        categories: vec![GqlSubjectCategory {
-            faculty: Some(String::from("faculty")),
-            field: Some(String::from("field")),
-            program: Some(String::from("program")),
-            category: Some(String::from("category")),
-            semester: String::from("semester"),
-            available: true,
-            year: vec![1000],
-            schedule: GqlSubjectSchedule {
-                schedule_type: GqlSubjectScheduleType::Intensive,
-                days: vec![],
+        categories: vec![
+            GqlSubjectCategory {
+                faculty: Some(String::from("faculty")),
+                field: Some(String::from("field")),
+                program: Some(String::from("program")),
+                category: Some(String::from("category")),
+                semester: String::from("semester"),
+                available: true,
+                year: vec![1000],
+                schedule: GqlSubjectSchedule {
+                    schedule_type: GqlSubjectScheduleType::Fixed,
+                    days: vec![GqlSubjectFixedSchedule { date: 1, hour: 1 }],
+                },
             },
-        }],
+            GqlSubjectCategory {
+                faculty: Some(String::from("faculty")),
+                field: Some(String::from("field")),
+                program: Some(String::from("program")),
+                category: Some(String::from("category")),
+                semester: String::from("semester"),
+                available: true,
+                year: vec![1000],
+                schedule: GqlSubjectSchedule {
+                    schedule_type: GqlSubjectScheduleType::Intensive,
+                    days: vec![],
+                },
+            },
+        ],
         instructors: vec![
             GqlSubjectInstructor {
                 name: String::from("ins1"),
