@@ -48,7 +48,7 @@ fn convert_schedule(value: SubjectSchedule) -> dto::GqlSubjectSchedule {
             days: Default::default(),
         },
         SubjectSchedule::Fixed(days) => dto::GqlSubjectSchedule {
-            schedule_type: dto::GqlSubjectScheduleType::Intensive,
+            schedule_type: dto::GqlSubjectScheduleType::Fixed,
             days: days
                 .into_iter()
                 .map(|d| dto::GqlSubjectFixedSchedule {
