@@ -1,30 +1,30 @@
 use async_graphql::*;
 
-#[derive(Debug, SimpleObject)]
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
 pub struct GqlSubjectClassPlan {
     pub topic: String,
     pub content: Option<String>,
 }
 
-#[derive(Debug, SimpleObject)]
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
 pub struct GqlSubjectInstructor {
     pub name: String,
     pub id: Option<String>,
 }
 
-#[derive(Debug, SimpleObject)]
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
 pub struct GqlSubjectGoalEvaluation {
     pub label: String,
     pub description: String,
 }
 
-#[derive(Debug, SimpleObject)]
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
 pub struct GqlSubjectGoal {
     pub description: String,
     pub evaluations: Vec<GqlSubjectGoalEvaluation>,
 }
 
-#[derive(Debug, PartialEq, SimpleObject)]
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
 pub struct GqlSubjectFixedSchedule {
     pub date: i32,
     pub hour: i32,
@@ -37,14 +37,14 @@ pub enum GqlSubjectScheduleType {
     Unknown,
 }
 
-#[derive(Debug, SimpleObject)]
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
 pub struct GqlSubjectSchedule {
     #[graphql(name = "type")]
     pub schedule_type: GqlSubjectScheduleType,
     pub days: Vec<GqlSubjectFixedSchedule>,
 }
 
-#[derive(Debug, SimpleObject)]
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
 pub struct GqlSubjectCategory {
     pub faculty: Option<String>,
     pub field: Option<String>,
@@ -68,13 +68,13 @@ pub enum GqlSubjectFlag {
     Lottery,
 }
 
-#[derive(Debug, SimpleObject)]
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
 pub struct GqlSubjectAttachment {
     pub key: String,
     pub name: String,
 }
 
-#[derive(Debug, SimpleObject)]
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
 pub struct GqlSubjectDto {
     pub id: i32,
     pub title: String,

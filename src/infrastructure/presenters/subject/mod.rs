@@ -1,5 +1,8 @@
 mod dto;
 
+#[cfg(test)]
+mod tests;
+
 use std::collections::HashMap;
 
 use crate::domain::entities::{
