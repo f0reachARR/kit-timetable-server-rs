@@ -6,8 +6,6 @@ mod dto;
 use crate::domain::entities::SubjectEntity;
 use crate::utils::elasticsearch::GetResponse;
 use dto::SubjectDocument;
-use futures::prelude::*;
-use std::pin::Pin;
 use std::{convert::TryFrom, sync::Arc};
 
 mod extend;
@@ -21,21 +19,16 @@ impl<'a> SubjectGateway<'a> {
     }
 }
 
+#[async_trait::async_trait]
 impl<'a> SubjectRepository for SubjectGateway<'a> {
-    fn get_by_id<'b>(
-        &'b self,
-        id: u32,
-    ) -> Pin<Box<dyn Future<Output = Result<SubjectEntity, anyhow::Error>> + 'b>> {
-        async move {
-            let res = self
-                .0
-                .get(GetParts::IndexId(self.1, id.to_string().as_str()))
-                .send()
-                .await?;
-            let doc = res.json::<GetResponse<SubjectDocument>>().await?;
+    async fn get_by_id(&self, id: u32) -> Result<SubjectEntity, anyhow::Error> {
+        let res = self
+            .0
+            .get(GetParts::IndexId(self.1, id.to_string().as_str()))
+            .send()
+            .await?;
+        let doc = res.json::<GetResponse<SubjectDocument>>().await?;
 
-            SubjectEntity::try_from(doc)
-        }
-        .boxed_local()
+        SubjectEntity::try_from(doc)
     }
 }

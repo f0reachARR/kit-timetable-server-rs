@@ -1,10 +1,6 @@
 use crate::domain::entities::SubjectEntity;
-use std::future::Future;
-use std::pin::Pin;
 
+#[async_trait::async_trait]
 pub trait SubjectRepository: Sync + Send {
-    fn get_by_id<'a>(
-        &'a self,
-        id: u32,
-    ) -> Pin<Box<dyn Future<Output = Result<SubjectEntity, anyhow::Error>> + 'a>>;
+    async fn get_by_id(&self, id: u32) -> Result<SubjectEntity, anyhow::Error>;
 }

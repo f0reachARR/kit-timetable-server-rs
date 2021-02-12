@@ -944,6 +944,7 @@ dependencies = [
  "anyhow",
  "async-graphql",
  "async-graphql-warp",
+ "async-trait",
  "elasticsearch",
  "futures",
  "serde",

@@ -1,4 +1,4 @@
-use std::{pin::Pin, sync::Arc};
+use std::sync::Arc;
 
 use crate::{
     application::{repositories::SubjectRepository, usecases::SubjectUsecase},
@@ -15,11 +15,9 @@ impl SubjectInteractor {
     }
 }
 
+#[async_trait::async_trait]
 impl SubjectUsecase for SubjectInteractor {
-    fn get_by_id<'b>(
-        &'b self,
-        id: u32,
-    ) -> Pin<Box<dyn futures::Future<Output = Result<SubjectEntity, anyhow::Error>> + 'b>> {
-        self.subject_repository.get_by_id(id)
+    async fn get_by_id<'b>(&'b self, id: u32) -> Result<SubjectEntity, anyhow::Error> {
+        self.subject_repository.get_by_id(id).await
     }
 }
