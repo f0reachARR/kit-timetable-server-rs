@@ -2,7 +2,7 @@ use crate::domain::entities::SubjectEntity;
 use futures::Future;
 use std::pin::Pin;
 
-pub trait SubjectUsecase {
+pub trait SubjectUsecase: Sync + Send {
     fn get_by_id<'b>(
         &'b self,
         id: u32,

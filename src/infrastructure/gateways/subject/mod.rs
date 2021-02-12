@@ -7,16 +7,16 @@ use crate::domain::entities::SubjectEntity;
 use crate::utils::elasticsearch::GetResponse;
 use dto::SubjectDocument;
 use futures::prelude::*;
-use std::convert::TryFrom;
 use std::pin::Pin;
+use std::{convert::TryFrom, sync::Arc};
 
 mod extend;
 mod extend_test;
 
-pub struct SubjectGateway<'a>(&'a Elasticsearch, &'a str);
+pub struct SubjectGateway<'a>(Arc<Elasticsearch>, &'a str);
 
 impl<'a> SubjectGateway<'a> {
-    pub fn new(client: &'a Elasticsearch, index: &'a str) -> SubjectGateway<'a> {
+    pub fn new(client: Arc<Elasticsearch>, index: &'a str) -> SubjectGateway<'a> {
         SubjectGateway(client, index)
     }
 }

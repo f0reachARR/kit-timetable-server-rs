@@ -1,24 +1,21 @@
-use std::pin::Pin;
+use std::{pin::Pin, sync::Arc};
 
 use crate::{
     application::{repositories::SubjectRepository, usecases::SubjectUsecase},
     domain::entities::SubjectEntity,
 };
 
-pub struct SubjectInteractor<'a, T1>
-where
-    T1: SubjectRepository,
-{
-    subject_repository: &'a T1,
+pub struct SubjectInteractor {
+    subject_repository: Arc<dyn SubjectRepository>,
 }
 
-impl<'a, T1: Send + Sync + SubjectRepository> SubjectInteractor<'a, T1> {
-    pub fn new<'b>(subject_repository: &'b T1) -> SubjectInteractor<'b, T1> {
-        SubjectInteractor::<'b, T1> { subject_repository }
+impl SubjectInteractor {
+    pub fn new(subject_repository: Arc<dyn SubjectRepository>) -> SubjectInteractor {
+        SubjectInteractor { subject_repository }
     }
 }
 
-impl<'a, T1: Send + Sync + SubjectRepository> SubjectUsecase for SubjectInteractor<'a, T1> {
+impl SubjectUsecase for SubjectInteractor {
     fn get_by_id<'b>(
         &'b self,
         id: u32,
