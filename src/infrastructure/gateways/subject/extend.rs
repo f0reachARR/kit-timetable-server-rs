@@ -1,10 +1,13 @@
 use super::dto;
-use crate::domain::entities::subject::{
-    SubjectCategory, SubjectClassPlan, SubjectFixedSchedule, SubjectFlag, SubjectGoal,
-    SubjectGoalEvaluation, SubjectInstructor, SubjectSchedule,
-};
 use crate::domain::entities::SubjectEntity;
 use crate::utils::elasticsearch::GetResponse;
+use crate::{
+    domain::entities::subject::{
+        SubjectCategory, SubjectClassPlan, SubjectFixedSchedule, SubjectFlag, SubjectGoal,
+        SubjectGoalEvaluation, SubjectInstructor, SubjectSchedule,
+    },
+    utils::elasticsearch::SearchHitItem,
+};
 use anyhow::anyhow;
 use std::collections::HashMap;
 use std::convert::TryFrom;
@@ -164,5 +167,17 @@ impl TryFrom<GetResponse<dto::SubjectDocument>> for SubjectEntity {
         } else {
             Err(anyhow!("Source not found"))
         }
+    }
+}
+
+impl TryFrom<SearchHitItem<dto::SubjectDocument>> for SubjectEntity {
+    type Error = anyhow::Error;
+
+    fn try_from(res: SearchHitItem<dto::SubjectDocument>) -> Result<Self, Self::Error> {
+        SubjectEntity::try_from(GetResponse::<dto::SubjectDocument> {
+            found: true,
+            _id: res._id,
+            _source: res._source,
+        })
     }
 }
