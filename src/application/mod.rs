@@ -1,5 +1,5 @@
 pub mod repositories {
-    mod subject;
+    pub mod subject;
 
     pub use subject::SubjectRepository;
 }
