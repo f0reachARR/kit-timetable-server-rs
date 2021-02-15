@@ -1,18 +1,10 @@
-use crate::{domain::entities::SubjectEntity, utils::phantom::Phantom};
-
-#[derive(Debug)]
-pub struct SubjectSearchScheduleDate;
-#[derive(Debug)]
-pub struct SubjectSearchScheduleHour;
+use crate::domain::entities::SubjectEntity;
 
 #[derive(Debug)]
 pub enum SubjectSearchScheduleOption {
     None,
     FixedWithoutCond,
-    Fixed(
-        Phantom<SubjectSearchScheduleDate>,
-        Phantom<SubjectSearchScheduleHour>,
-    ),
+    Fixed { date: u32, hour: u32 },
     Intensive,
 }
 
