@@ -22,7 +22,7 @@ pub struct SubjectSearchInput<'a> {
     pub count: u32,
     pub title: Option<&'a str>,
     pub available_only: bool,
-    pub schedule: &'a SubjectSearchScheduleOption,
+    pub schedule: SubjectSearchScheduleOption,
     pub semester: Option<&'a str>,
     pub year: Option<u32>,
     pub category: Option<&'a str>,

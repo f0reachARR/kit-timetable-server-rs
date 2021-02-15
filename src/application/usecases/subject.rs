@@ -22,7 +22,7 @@ pub struct SubjectSearchParameter<'a> {
     pub count: u32,
     pub title: Option<&'a str>,
     pub available_only: bool,
-    pub schedule: &'a SubjectSearchScheduleOption,
+    pub schedule: SubjectSearchScheduleOption,
     pub semester: Option<&'a str>,
     pub year: Option<u32>,
     pub category: Option<&'a str>,
@@ -42,6 +42,6 @@ pub trait SubjectUsecase: Sync + Send {
     async fn get_by_id<'b>(&'b self, id: u32) -> Result<SubjectEntity, anyhow::Error>;
     async fn search(
         &self,
-        param: &SubjectSearchParameter,
+        param: &SubjectSearchParameter<'_>,
     ) -> Result<SubjectSearchResult, anyhow::Error>;
 }

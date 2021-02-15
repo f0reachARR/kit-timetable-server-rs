@@ -62,7 +62,7 @@ impl<'a> SubjectRepository for SubjectGateway<'a> {
             }));
         }
 
-        match input.schedule {
+        match &input.schedule {
             subject::SubjectSearchScheduleOption::None => {}
             subject::SubjectSearchScheduleOption::Intensive => {
                 push_terms!(must, "categories.schedule.type", "intensive");
