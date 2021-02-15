@@ -1,13 +1,13 @@
 pub mod repositories {
     pub mod subject;
 
-    pub use subject::SubjectRepository;
+    pub use subject::*;
 }
 
 pub mod usecases {
     mod subject;
 
-    pub use subject::SubjectUsecase;
+    pub use subject::*;
 }
 
 pub mod interactors {
