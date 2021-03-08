@@ -1,16 +1,11 @@
-use crate::domain::entities::subject_td;
+use super::subject::*;
 
-use super::{dto::*, from_entity};
-
-#[test]
-pub fn test_dto() {
-    let entity = subject_td::get_subject_entity_test_data();
-    let actual = from_entity(entity);
-    let expected = GqlSubjectDto {
+pub fn get_subject_entity_test_data() -> SubjectEntity {
+    SubjectEntity {
         id: 1,
         title: String::from("title"),
         categories: vec![
-            GqlSubjectCategory {
+            SubjectCategory {
                 faculty: Some(String::from("faculty")),
                 field: Some(String::from("field")),
                 program: Some(String::from("program")),
@@ -18,12 +13,9 @@ pub fn test_dto() {
                 semester: String::from("semester"),
                 available: true,
                 year: vec![1000],
-                schedule: GqlSubjectSchedule {
-                    schedule_type: GqlSubjectScheduleType::Fixed,
-                    days: vec![GqlSubjectFixedSchedule { date: 1, hour: 1 }],
-                },
+                schedule: SubjectSchedule::Fixed(vec![SubjectFixedSchedule { date: 1, hour: 1 }]),
             },
-            GqlSubjectCategory {
+            SubjectCategory {
                 faculty: Some(String::from("faculty")),
                 field: Some(String::from("field")),
                 program: Some(String::from("program")),
@@ -31,35 +23,32 @@ pub fn test_dto() {
                 semester: String::from("semester"),
                 available: true,
                 year: vec![1000],
-                schedule: GqlSubjectSchedule {
-                    schedule_type: GqlSubjectScheduleType::Intensive,
-                    days: vec![],
-                },
+                schedule: SubjectSchedule::Intensive,
             },
         ],
         instructors: vec![
-            GqlSubjectInstructor {
+            SubjectInstructor {
                 name: String::from("ins1"),
                 id: Some(String::from("id1")),
             },
-            GqlSubjectInstructor {
+            SubjectInstructor {
                 name: String::from("ins2"),
                 id: None,
             },
         ],
-        attachments: vec![GqlSubjectAttachment {
-            key: String::from("a1"),
-            name: String::from("b1"),
-        }],
-        flags: vec![GqlSubjectFlag::Internship],
+        attachments: [(String::from("a1"), String::from("b1"))]
+            .iter()
+            .cloned()
+            .collect(),
+        flags: vec![SubjectFlag::Internship],
         outline: String::from("outline"),
         purpose: String::from("purpose"),
         plans: vec![
-            GqlSubjectClassPlan {
+            SubjectClassPlan {
                 topic: String::from("topic"),
                 content: Some(String::from("content")),
             },
-            GqlSubjectClassPlan {
+            SubjectClassPlan {
                 topic: String::from("topic"),
                 content: None,
             },
@@ -76,14 +65,12 @@ pub fn test_dto() {
         subject_type: Some(String::from("subject_type")),
         code: Some(String::from("code")),
         class_name: Some(String::from("class_name")),
-        goal: Some(GqlSubjectGoal {
+        goal: Some(SubjectGoal {
             description: String::from("desc"),
-            evaluations: vec![GqlSubjectGoalEvaluation {
+            evaluations: vec![SubjectGoalEvaluation {
                 label: String::from("label"),
                 description: String::from("desc2"),
             }],
         }),
-    };
-
-    assert_eq!(actual, expected);
+    }
 }
