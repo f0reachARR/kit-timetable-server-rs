@@ -1,24 +1,24 @@
 use std::collections::HashMap;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SubjectClassPlan {
     pub topic: String,
     pub content: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SubjectInstructor {
     pub name: String,
     pub id: Option<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SubjectGoalEvaluation {
     pub label: String,
     pub description: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SubjectGoal {
     pub description: String,
     pub evaluations: Vec<SubjectGoalEvaluation>,
@@ -37,7 +37,7 @@ pub enum SubjectSchedule {
     Unknown,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SubjectCategory {
     pub faculty: Option<String>,
     pub field: Option<String>,
@@ -61,7 +61,7 @@ pub enum SubjectFlag {
     Lottery,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SubjectEntity {
     pub id: i32,
     pub title: String,
