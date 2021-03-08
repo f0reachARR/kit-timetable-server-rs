@@ -13,6 +13,8 @@ pub mod usecases {
 
 pub mod interactors {
     mod subject;
+    #[cfg(test)]
+    mod subject_test;
 
     pub use subject::SubjectInteractor;
 }
