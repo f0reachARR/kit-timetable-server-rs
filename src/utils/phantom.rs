@@ -24,9 +24,6 @@ impl<T, V: Copy + Clone> Phantom<T, V> {
 
 impl<T, V: Copy + Clone> From<V> for Phantom<T, V> {
     fn from(data: V) -> Self {
-        Self {
-            data,
-            _phantom: PhantomData,
-        }
+        Self::new(data)
     }
 }
