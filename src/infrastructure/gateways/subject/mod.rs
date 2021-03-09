@@ -46,9 +46,9 @@ impl<'a> SubjectRepository for SubjectGateway<'a> {
         SubjectEntity::try_from(doc)
     }
 
-    async fn search(
+    async fn search<'b>(
         &self,
-        input: &subject::SubjectSearchInput<'_>,
+        input: subject::SubjectSearchInput<'b>,
     ) -> Result<subject::SubjectSearchOutput, anyhow::Error> {
         let mut must = Vec::<Value>::new();
 

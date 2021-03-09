@@ -18,3 +18,4 @@ tokio = { version = "1.0", features = ["full"] }
 futures = "*"
 thiserror = "1.0.23"
 anyhow = "1.0.38"
+mockall = "0.9.1"
