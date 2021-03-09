@@ -142,3 +142,30 @@ async fn test_search_2() {
         .await
         .is_ok());
 }
+
+#[tokio::test]
+async fn test_search_count_over() {
+    let mock_repo = MockSubjectRepository::new();
+    let usecase: Arc<dyn SubjectUsecase> = Arc::new(SubjectInteractor::new(Arc::new(mock_repo)));
+
+    let result = usecase
+        .search(&SubjectSearchParameter {
+            from: 0,
+            count: 500,
+            title: Some("title"),
+            available_only: true,
+            schedule: SubjectSearchScheduleOption::Fixed { date: 2, hour: 3 },
+            semester: Some("semester"),
+            year: Some(6),
+            category: Some("category"),
+            faculty: Some("faculty"),
+            program: Some("program"),
+            field: Some("field"),
+        })
+        .await;
+    assert!(result.is_err());
+    assert_eq!(
+        result.unwrap_err().to_string(),
+        "Too many items in a request"
+    );
+}

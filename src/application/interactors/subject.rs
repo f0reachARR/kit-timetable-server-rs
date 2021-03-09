@@ -33,6 +33,10 @@ impl SubjectUsecase for SubjectInteractor {
         &self,
         param: &SubjectSearchParameter<'_>,
     ) -> Result<SubjectSearchResult, anyhow::Error> {
+        if param.count > 70 {
+            return Err(anyhow::anyhow!("Too many items in a request"));
+        }
+
         let input = SubjectSearchInput {
             from: param.from,
             count: param.count,
