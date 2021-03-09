@@ -1,6 +1,7 @@
+use crate::application::usecases;
 use crate::domain::entities::subject_td;
 
-use super::{dto::*, from_entity};
+use super::{convert_search_result, dto::*, from_entity};
 
 #[test]
 pub fn test_dto() {
@@ -83,6 +84,20 @@ pub fn test_dto() {
                 description: String::from("desc2"),
             }],
         }),
+    };
+
+    assert_eq!(actual, expected);
+}
+
+#[test]
+fn test_search_result() {
+    let actual = convert_search_result(usecases::SubjectSearchResult {
+        count: 123,
+        subjects: vec![],
+    });
+    let expected = GqlSubjectSearchResult {
+        count: 123,
+        items: vec![],
     };
 
     assert_eq!(actual, expected);

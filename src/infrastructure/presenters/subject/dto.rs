@@ -104,3 +104,9 @@ pub struct GqlSubjectDto {
     pub class_name: Option<String>,
     pub goal: Option<GqlSubjectGoal>,
 }
+
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
+pub struct GqlSubjectSearchResult {
+    pub count: u32,
+    pub items: Vec<GqlSubjectDto>,
+}

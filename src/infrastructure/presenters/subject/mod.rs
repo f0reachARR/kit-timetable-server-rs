@@ -5,14 +5,19 @@ mod tests;
 
 use std::collections::HashMap;
 
-use crate::domain::entities::{
-    subject::{
-        SubjectCategory, SubjectClassPlan, SubjectFlag, SubjectGoal, SubjectGoalEvaluation,
-        SubjectInstructor, SubjectSchedule,
+use crate::{
+    application::usecases,
+    domain::entities::{
+        subject::{
+            SubjectCategory, SubjectClassPlan, SubjectFlag, SubjectGoal, SubjectGoalEvaluation,
+            SubjectInstructor, SubjectSchedule,
+        },
+        SubjectEntity,
     },
-    SubjectEntity,
 };
 pub use dto::GqlSubjectDto;
+
+use self::dto::GqlSubjectSearchResult;
 
 fn convert_attachments(value: HashMap<String, String>) -> Vec<dto::GqlSubjectAttachment> {
     value
@@ -133,5 +138,12 @@ pub fn from_entity(value: SubjectEntity) -> dto::GqlSubjectDto {
         code: value.code,
         class_name: value.class_name,
         goal: value.goal.map(convert_goal),
+    }
+}
+
+pub fn convert_search_result(input: usecases::SubjectSearchResult) -> GqlSubjectSearchResult {
+    GqlSubjectSearchResult {
+        count: input.count,
+        items: input.subjects.into_iter().map(from_entity).collect(),
     }
 }
