@@ -60,7 +60,7 @@ impl SubjectUsecase for SubjectInteractor {
             program: param.program,
             field: param.field,
         };
-        let result = self.subject_repository.search(&input).await?;
+        let result = self.subject_repository.search(input).await?;
 
         Ok(SubjectSearchResult {
             count: result.total_count,

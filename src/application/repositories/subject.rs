@@ -3,12 +3,12 @@ use mockall::*;
 
 use crate::{domain::entities::SubjectEntity, utils::phantom::Phantom};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SubjectSearchScheduleDate;
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SubjectSearchScheduleHour;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum SubjectSearchScheduleOption {
     None,
     FixedWithoutCond,
@@ -19,7 +19,7 @@ pub enum SubjectSearchScheduleOption {
     Intensive,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct SubjectSearchInput<'a> {
     pub from: u32,
     pub count: u32,
