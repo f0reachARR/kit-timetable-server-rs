@@ -1,16 +1,18 @@
-use async_graphql::{Context, Object, Result};
+use async_graphql::{Context, Object};
 
-use crate::infrastructure::{frameworks::UsecaseContainer, presenters::subject};
+use crate::infrastructure::{controllers, frameworks::UsecaseContainer, presenters};
 
 #[derive(Default)]
 pub struct SubjectQueryRoot;
 
 #[Object]
 impl SubjectQueryRoot {
-    async fn subject(&self, ctx: &Context<'_>, id: u32) -> Result<subject::GqlSubjectDto> {
-        let usecases = ctx.data::<UsecaseContainer>()?;
-        let entity = usecases.subject_usecase.get_by_id(id).await?;
-        let dto = subject::from_entity(entity);
-        Ok(dto)
+    async fn subject(
+        &self,
+        ctx: &Context<'_>,
+        id: u32,
+    ) -> async_graphql::Result<presenters::subject::GqlSubjectDto> {
+        let container = ctx.data::<UsecaseContainer>()?;
+        Ok(controllers::subject::get_by_id(container, id).await?)
     }
 }

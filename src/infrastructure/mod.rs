@@ -4,6 +4,10 @@ pub mod gateways {
     pub use subject::SubjectGateway;
 }
 
+pub mod controllers {
+    pub mod subject;
+}
+
 pub mod presenters {
     pub mod subject;
 }
