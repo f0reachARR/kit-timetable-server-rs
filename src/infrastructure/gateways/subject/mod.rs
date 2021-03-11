@@ -67,13 +67,14 @@ impl<'a> SubjectRepository for SubjectGateway<'a> {
             subject::SubjectSearchScheduleOption::Intensive => {
                 push_terms!(must, "categories.schedule.type", "intensive");
             }
-            subject::SubjectSearchScheduleOption::FixedWithoutCond => {
+            subject::SubjectSearchScheduleOption::Fixed { date, hour } => {
                 push_terms!(must, "categories.schedule.type", "fixed");
-            }
-            subject::SubjectSearchScheduleOption::Fixed(date, hour) => {
-                push_terms!(must, "categories.schedule.type", "fixed");
-                push_terms!(must, "categories.schedule.days.date", date.get());
-                push_terms!(must, "categories.schedule.days.hour", hour.get());
+                if let Some(date) = date {
+                    push_terms!(must, "categories.schedule.days.date", date);
+                }
+                if let Some(hour) = hour {
+                    push_terms!(must, "categories.schedule.days.hour", hour);
+                }
             }
         }
 

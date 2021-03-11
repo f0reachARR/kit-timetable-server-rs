@@ -1,21 +1,15 @@
 use async_trait::async_trait;
 use mockall::*;
 
-use crate::{domain::entities::SubjectEntity, utils::phantom::Phantom};
-
-#[derive(Debug, PartialEq)]
-pub struct SubjectSearchScheduleDate;
-#[derive(Debug, PartialEq)]
-pub struct SubjectSearchScheduleHour;
+use crate::domain::entities::SubjectEntity;
 
 #[derive(Debug, PartialEq)]
 pub enum SubjectSearchScheduleOption {
     None,
-    FixedWithoutCond,
-    Fixed(
-        Phantom<SubjectSearchScheduleDate>,
-        Phantom<SubjectSearchScheduleHour>,
-    ),
+    Fixed {
+        date: Option<u32>,
+        hour: Option<u32>,
+    },
     Intensive,
 }
 
