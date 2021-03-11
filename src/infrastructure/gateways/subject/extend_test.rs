@@ -2,7 +2,7 @@
 mod test {
     use crate::domain::entities::{
         subject::{SubjectFixedSchedule, SubjectFlag, SubjectSchedule},
-        SubjectEntity,
+        subject_td, SubjectEntity,
     };
     use crate::infrastructure::gateways::subject::dto::{
         SubjectDocument, SubjectFixedScheduleDoc, SubjectScheduleDoc,
@@ -92,38 +92,64 @@ mod test {
         {
             "_index" : "kittimetable_subjects",
             "_type" : "_doc",
-            "_id" : "300",
+            "_id" : "1",
             "_version" : 1,
             "_seq_no" : 789,
             "_primary_term" : 1,
             "found" : true,
             "_source" : {
-              "id" : 300,
-              "courseId" : 10061837,
-              "credits" : 1,
-              "flags" : [ ],
+              "id" : 1,
+              "courseId" : 3,
+              "credits" : 4,
+              "flags" : ["internship"],
+              "class": "class_name",
+              "code": "code",
               "categories" : [
                 {
                   "available" : true,
                   "year" : [
-                    2
+                    1000
                   ],
-                  "semester" : "前学期",
-                  "faculty" : "全学共通科目",
-                  "field" : "言語教育科目",
-                  "program" : "英語",
-                  "category" : "",
+                  "semester" : "semester",
+                  "faculty" : "faculty",
+                  "field" : "field",
+                  "program" : "program",
+                  "category" : "category",
                   "schedule" : {
-                    "type" : "unknown"
+                    "type" : "fixed",
+                    "days" : [
+                      {
+                        "date" : 1,
+                        "hour" : 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "available" : true,
+                  "year" : [
+                    1000
+                  ],
+                  "semester" : "semester",
+                  "faculty" : "faculty",
+                  "field" : "field",
+                  "program" : "program",
+                  "category" : "category",
+                  "schedule" : {
+                    "type" : "intensive"
                   }
                 }
               ],
-              "type" : "演習",
-              "title" : "Active English Reading Ⅱ",
+              "type" : "subject_type",
+              "title" : "title",
               "instructors" : [
                 {
+                  "id" : "id1",
+                  "name" : "ins1"
+                },
+                {
                   "id" : null,
-                  "name" : "(金丸　敏幸)"
+                  "name" : "ins2"
                 }
               ],
               "outline" : "outline",
@@ -131,29 +157,41 @@ mod test {
               "requirement" : "requirement",
               "point" : "point",
               "textbook" : "textbook",
-              "gradingPolicy" : "gradingPolicy",
+              "gradingPolicy" : "grading_policy",
               "remark" : "remark",
-              "researchPlan" : "",
+              "researchPlan" : "research_plan",
+              "timetableId": 2,
               "plans" : [
                 {
                   "topic" : "topic",
                   "content" : "content"
+                },
+                {
+                  "topic" : "topic",
+                  "content" : null
                 }
               ],
               "goal" : {
-                "description" : "description",
+                "description" : "desc",
                 "evaluations" : [
                   {
                     "label" : "label",
-                    "description" : "description"
+                    "description" : "desc2"
                   }
                 ]
-              }
+              },
+              "attachments": [
+                {
+                  "key": "a1",
+                  "name": "b1"
+                }
+              ]
             }
           }          
         "#;
         let test_parsed = serde_json::from_str::<GetResponse<SubjectDocument>>(test_json).unwrap();
         let actual = SubjectEntity::try_from(test_parsed);
         assert!(actual.is_ok());
+        assert_eq!(actual.unwrap(), subject_td::get_subject_entity_test_data())
     }
 }

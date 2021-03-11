@@ -82,7 +82,7 @@ pub struct SubjectDocument {
     #[serde(rename = "type")]
     pub subject_type: Option<String>,
     pub code: Option<String>,
-    #[serde(rename = "className")]
+    #[serde(rename = "class")]
     pub class_name: Option<String>,
     pub goal: Option<SubjectGoalDoc>,
 }
