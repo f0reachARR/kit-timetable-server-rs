@@ -3,8 +3,10 @@ use crate::domain::entities::SubjectEntity;
 #[derive(Debug)]
 pub enum SubjectSearchScheduleOption {
     None,
-    FixedWithoutCond,
-    Fixed { date: u32, hour: u32 },
+    Fixed {
+        date: Option<u32>,
+        hour: Option<u32>,
+    },
     Intensive,
 }
 

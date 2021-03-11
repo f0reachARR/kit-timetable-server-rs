@@ -2,15 +2,11 @@ use std::sync::Arc;
 
 use crate::{
     application::{
-        repositories::{
-            SubjectRepository, SubjectSearchInput, SubjectSearchScheduleDate,
-            SubjectSearchScheduleHour, SubjectSearchScheduleOption,
-        },
+        repositories::{SubjectRepository, SubjectSearchInput, SubjectSearchScheduleOption},
         usecases,
         usecases::{SubjectSearchParameter, SubjectSearchResult, SubjectUsecase},
     },
     domain::entities::SubjectEntity,
-    utils::phantom::Phantom,
 };
 
 pub struct SubjectInteractor {
@@ -44,14 +40,11 @@ impl SubjectUsecase for SubjectInteractor {
             available_only: param.available_only,
             schedule: match &param.schedule {
                 usecases::SubjectSearchScheduleOption::None => SubjectSearchScheduleOption::None,
-                usecases::SubjectSearchScheduleOption::FixedWithoutCond => {
-                    SubjectSearchScheduleOption::FixedWithoutCond
-                }
                 usecases::SubjectSearchScheduleOption::Fixed { date, hour } => {
-                    SubjectSearchScheduleOption::Fixed(
-                        Phantom::<SubjectSearchScheduleDate>::from(date.clone()),
-                        Phantom::<SubjectSearchScheduleHour>::from(hour.clone()),
-                    )
+                    SubjectSearchScheduleOption::Fixed {
+                        date: date.clone(),
+                        hour: hour.clone(),
+                    }
                 }
                 usecases::SubjectSearchScheduleOption::Intensive => {
                     SubjectSearchScheduleOption::Intensive

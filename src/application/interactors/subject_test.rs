@@ -102,7 +102,10 @@ async fn test_search_2() {
                 && input.count == 5
                 && input.available_only == true
                 && input.schedule
-                    == repositories::SubjectSearchScheduleOption::Fixed(2.into(), 3.into())
+                    == repositories::SubjectSearchScheduleOption::Fixed {
+                        date: Some(2),
+                        hour: Some(3),
+                    }
                 && input.title.unwrap() == "title"
                 && input.semester.unwrap() == "semester"
                 && input.faculty.unwrap() == "faculty"
@@ -131,7 +134,10 @@ async fn test_search_2() {
             count: 5,
             title: Some("title"),
             available_only: true,
-            schedule: SubjectSearchScheduleOption::Fixed { date: 2, hour: 3 },
+            schedule: SubjectSearchScheduleOption::Fixed {
+                date: Some(2),
+                hour: Some(3),
+            },
             semester: Some("semester"),
             year: Some(6),
             category: Some("category"),
@@ -154,7 +160,10 @@ async fn test_search_count_over() {
             count: 500,
             title: Some("title"),
             available_only: true,
-            schedule: SubjectSearchScheduleOption::Fixed { date: 2, hour: 3 },
+            schedule: SubjectSearchScheduleOption::Fixed {
+                date: Some(2),
+                hour: Some(3),
+            },
             semester: Some("semester"),
             year: Some(6),
             category: Some("category"),
