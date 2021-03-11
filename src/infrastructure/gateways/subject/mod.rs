@@ -13,6 +13,7 @@ use serde_json::{json, Value};
 use std::{convert::TryFrom, sync::Arc};
 
 mod extend;
+#[cfg(test)]
 mod extend_test;
 
 pub struct SubjectGateway<'a>(Arc<Elasticsearch>, &'a str);
