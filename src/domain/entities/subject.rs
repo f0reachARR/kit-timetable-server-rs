@@ -87,3 +87,13 @@ pub struct SubjectEntity {
     pub class_name: Option<String>,
     pub goal: Option<SubjectGoal>,
 }
+
+#[derive(Debug, PartialEq)]
+pub struct SubjectSearchTermsEntity {
+    pub categories: HashMap<
+        String, /* faculty */
+        HashMap<String /* field */, HashMap<String /* program */, Vec<String /* category */>>>,
+    >,
+    pub semesters: Vec<String>,
+    pub years: Vec<i32>,
+}

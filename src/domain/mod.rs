@@ -3,5 +3,5 @@ pub mod entities {
     #[cfg(test)]
     pub mod subject_td;
 
-    pub use subject::SubjectEntity;
+    pub use subject::{SubjectEntity, SubjectSearchTermsEntity};
 }

@@ -74,3 +74,26 @@ pub fn get_subject_entity_test_data() -> SubjectEntity {
         }),
     }
 }
+
+pub fn get_subject_search_terms_test_data() -> SubjectSearchTermsEntity {
+    SubjectSearchTermsEntity {
+        categories: [(
+            "f1".to_string(),
+            [(
+                "f2".to_string(),
+                [("p".to_string(), vec!["c1".to_string(), "c2".to_string()])]
+                    .iter()
+                    .cloned()
+                    .collect(),
+            )]
+            .iter()
+            .cloned()
+            .collect(),
+        )]
+        .iter()
+        .cloned()
+        .collect(),
+        semesters: vec!["s1".to_string(), "s2".to_string()],
+        years: vec![1, 2, 3],
+    }
+}
