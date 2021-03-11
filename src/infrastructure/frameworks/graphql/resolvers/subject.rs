@@ -15,4 +15,15 @@ impl SubjectQueryRoot {
         let container = ctx.data::<UsecaseContainer>()?;
         Ok(controllers::subject::get_by_id(container, id).await?)
     }
+
+    async fn subject_search(
+        &self,
+        ctx: &Context<'_>,
+        from: u32,
+        count: u32,
+        query: controllers::subject::GqlSubjectSearchInput,
+    ) -> async_graphql::Result<presenters::subject::GqlSubjectSearchResult> {
+        let container = ctx.data::<UsecaseContainer>()?;
+        Ok(controllers::subject::search(container, from, count, query).await?)
+    }
 }

@@ -15,9 +15,7 @@ use crate::{
         SubjectEntity,
     },
 };
-pub use dto::GqlSubjectDto;
-
-use self::dto::GqlSubjectSearchResult;
+pub use dto::{GqlSubjectDto, GqlSubjectSearchResult};
 
 fn convert_attachments(value: HashMap<String, String>) -> Vec<dto::GqlSubjectAttachment> {
     value
