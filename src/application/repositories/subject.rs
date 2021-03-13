@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use mockall::*;
 
-use crate::domain::entities::SubjectEntity;
+use crate::domain::entities::{SubjectEntity, SubjectSearchTermsEntity};
 
 #[derive(Debug, PartialEq)]
 pub enum SubjectSearchScheduleOption {
@@ -42,4 +42,5 @@ pub trait SubjectRepository: Sync + Send {
         &self,
         input: SubjectSearchInput<'b>,
     ) -> Result<SubjectSearchOutput, anyhow::Error>;
+    async fn get_terms(&self) -> Result<SubjectSearchTermsEntity, anyhow::Error>;
 }
