@@ -1,4 +1,4 @@
-use crate::domain::entities::SubjectEntity;
+use crate::domain::entities::{SubjectEntity, SubjectSearchTermsEntity};
 
 #[derive(Debug)]
 pub enum SubjectSearchScheduleOption {
@@ -38,4 +38,5 @@ pub trait SubjectUsecase: Sync + Send {
         &self,
         param: &SubjectSearchParameter<'_>,
     ) -> Result<SubjectSearchResult, anyhow::Error>;
+    async fn get_terms(&self) -> Result<SubjectSearchTermsEntity, anyhow::Error>;
 }

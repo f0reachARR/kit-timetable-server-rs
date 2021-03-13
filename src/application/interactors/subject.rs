@@ -64,4 +64,12 @@ impl SubjectUsecase for SubjectInteractor {
             subjects: result.items,
         })
     }
+
+    async fn get_terms(
+        &self,
+    ) -> Result<crate::domain::entities::SubjectSearchTermsEntity, anyhow::Error> {
+        let entity = self.subject_repository.get_terms().await?;
+        // Only meaningful terms
+        Ok(entity)
+    }
 }
