@@ -2,12 +2,12 @@
 mod test {
     use crate::domain::entities::{
         subject::{SubjectFixedSchedule, SubjectFlag, SubjectSchedule},
-        subject_td, SubjectEntity,
+        subject_td, SubjectEntity, SubjectSearchTermsEntity,
     };
     use crate::infrastructure::gateways::subject::dto::{
-        SubjectDocument, SubjectFixedScheduleDoc, SubjectScheduleDoc,
+        SubjectDocument, SubjectFixedScheduleDoc, SubjectScheduleDoc, SubjectSearchTermsAgg,
     };
-    use crate::utils::elasticsearch::GetResponse;
+    use crate::utils::elasticsearch::{AggregationResponse, GetResponse};
     use std::convert::TryFrom;
     use std::str::FromStr;
 
@@ -192,6 +192,115 @@ mod test {
         let test_parsed = serde_json::from_str::<GetResponse<SubjectDocument>>(test_json).unwrap();
         let actual = SubjectEntity::try_from(test_parsed);
         assert!(actual.is_ok());
-        assert_eq!(actual.unwrap(), subject_td::get_subject_entity_test_data())
+        assert_eq!(actual.unwrap(), subject_td::get_subject_entity_test_data());
+    }
+
+    #[test]
+    fn subject_search_terms_dto_test() {
+        let test_json = r#"
+      {
+        "took" : 0,
+        "timed_out" : false,
+        "_shards" : {
+          "total" : 1,
+          "successful" : 1,
+          "skipped" : 0,
+          "failed" : 0
+        },
+        "hits" : {
+          "total" : {
+            "value" : 1755,
+            "relation" : "eq"
+          },
+          "max_score" : null,
+          "hits" : [ ]
+        },
+        "aggregations" : {
+          "semesters" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "s1",
+                "doc_count" : 856
+              },
+              {
+                "key" : "s2",
+                "doc_count" : 781
+              }
+            ]
+          },
+          "categories" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : "f1",
+                "doc_count" : 489,
+                "fields" : {
+                  "doc_count_error_upper_bound" : 0,
+                  "sum_other_doc_count" : 0,
+                  "buckets" : [
+                    {
+                      "key" : "f2",
+                      "doc_count" : 751,
+                      "programs" : {
+                        "doc_count_error_upper_bound" : 0,
+                        "sum_other_doc_count" : 0,
+                        "buckets" : [
+                          {
+                            "key" : "p",
+                            "doc_count" : 751,
+                            "categories" : {
+                              "doc_count_error_upper_bound" : 0,
+                              "sum_other_doc_count" : 4,
+                              "buckets" : [
+                                {
+                                  "key" : "c1",
+                                  "doc_count" : 1114
+                                },
+                                {
+                                  "key" : "c2",
+                                  "doc_count" : 62
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "years" : {
+            "doc_count_error_upper_bound" : 0,
+            "sum_other_doc_count" : 0,
+            "buckets" : [
+              {
+                "key" : 1,
+                "doc_count" : 636
+              },
+              {
+                "key" : 2,
+                "doc_count" : 483
+              },
+              {
+                "key" : 3,
+                "doc_count" : 469
+              }
+            ]
+          }
+        }
+        }"#;
+        let test_parsed =
+            serde_json::from_str::<AggregationResponse<SubjectSearchTermsAgg>>(test_json).unwrap();
+        let actual = SubjectSearchTermsEntity::try_from(test_parsed);
+        assert!(actual.is_ok());
+        assert_eq!(
+            actual.unwrap(),
+            subject_td::get_subject_search_terms_test_data()
+        );
     }
 }

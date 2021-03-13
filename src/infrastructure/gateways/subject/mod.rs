@@ -6,8 +6,8 @@ use elasticsearch::{Elasticsearch, GetParts, SearchParts};
 
 mod dto;
 
-use crate::domain::entities::SubjectEntity;
-use crate::utils::elasticsearch::GetResponse;
+use crate::domain::entities::{SubjectEntity, SubjectSearchTermsEntity};
+use crate::utils::elasticsearch::{AggregationResponse, GetResponse};
 use dto::SubjectDocument;
 use serde_json::{json, Value};
 use std::{convert::TryFrom, sync::Arc};
@@ -34,23 +34,8 @@ macro_rules! push_terms {
     };
 }
 
-#[async_trait::async_trait]
-impl<'a> SubjectRepository for SubjectGateway<'a> {
-    async fn get_by_id(&self, id: u32) -> Result<SubjectEntity, anyhow::Error> {
-        let res = self
-            .0
-            .get(GetParts::IndexId(self.1, id.to_string().as_str()))
-            .send()
-            .await?;
-        let doc = res.json::<GetResponse<SubjectDocument>>().await?;
-
-        SubjectEntity::try_from(doc)
-    }
-
-    async fn search<'b>(
-        &self,
-        input: subject::SubjectSearchInput<'b>,
-    ) -> Result<subject::SubjectSearchOutput, anyhow::Error> {
+impl<'a> SubjectGateway<'a> {
+    fn build_query_must<'b>(input: &'b subject::SubjectSearchInput<'b>) -> serde_json::Value {
         let mut must = Vec::<Value>::new();
 
         if input.available_only {
@@ -109,13 +94,34 @@ impl<'a> SubjectRepository for SubjectGateway<'a> {
             push_terms!(must, "categories.field", field);
         }
 
+        serde_json::Value::Array(must)
+    }
+}
+
+#[async_trait::async_trait]
+impl<'a> SubjectRepository for SubjectGateway<'a> {
+    async fn get_by_id(&self, id: u32) -> Result<SubjectEntity, anyhow::Error> {
+        let res = self
+            .0
+            .get(GetParts::IndexId(self.1, id.to_string().as_str()))
+            .send()
+            .await?;
+        let doc = res.json::<GetResponse<SubjectDocument>>().await?;
+
+        SubjectEntity::try_from(doc)
+    }
+
+    async fn search<'b>(
+        &self,
+        input: subject::SubjectSearchInput<'b>,
+    ) -> Result<subject::SubjectSearchOutput, anyhow::Error> {
         let res = self
             .0
             .search(SearchParts::Index(&[self.1]))
             .body(json!({
                 "query": {
                     "bool": {
-                        "must": must,
+                        "must": Self::build_query_must(&input),
                     }
                 },
                 "from": input.from,
@@ -134,5 +140,65 @@ impl<'a> SubjectRepository for SubjectGateway<'a> {
                 .map(|item| SubjectEntity::try_from(item))
                 .collect::<Result<Vec<SubjectEntity>, anyhow::Error>>()?,
         })
+    }
+
+    async fn get_terms(&self) -> Result<SubjectSearchTermsEntity, anyhow::Error> {
+        let res = self
+            .0
+            .search(SearchParts::Index(&[self.1]))
+            .body(json!({
+                "aggs": {
+                    "categories": {
+                        "terms": {
+                            "field": "categories.faculty",
+                            "size": 50
+                        },
+                        "aggs": {
+                            "fields": {
+                                "terms": {
+                                    "field": "categories.field",
+                                    "size": 50
+                                },
+                                "aggs": {
+                                    "programs": {
+                                        "terms": {
+                                            "field": "categories.program",
+                                            "size": 50
+                                        },
+                                        "aggs": {
+                                            "categories": {
+                                                "terms": {
+                                                    "field": "categories.category",
+                                                    "size": 50
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "semesters": {
+                        "terms": {
+                            "field": "categories.semester",
+                            "size": 50
+                        }
+                    },
+                    "years": {
+                        "terms": {
+                            "field": "categories.year",
+                            "size": 50
+                        }
+                    }
+                },
+                "size": 0,
+            }))
+            .send()
+            .await?;
+        let result = res
+            .json::<AggregationResponse<dto::SubjectSearchTermsAgg>>()
+            .await?;
+
+        Ok(SubjectSearchTermsEntity::from(result))
     }
 }

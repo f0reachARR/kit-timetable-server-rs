@@ -1,5 +1,4 @@
 use super::dto;
-use crate::domain::entities::SubjectEntity;
 use crate::utils::elasticsearch::GetResponse;
 use crate::{
     domain::entities::subject::{
@@ -7,6 +6,10 @@ use crate::{
         SubjectGoalEvaluation, SubjectInstructor, SubjectSchedule,
     },
     utils::elasticsearch::SearchHitItem,
+};
+use crate::{
+    domain::entities::{SubjectEntity, SubjectSearchTermsEntity},
+    utils::elasticsearch::AggregationResponse,
 };
 use anyhow::anyhow;
 use std::collections::HashMap;
@@ -179,5 +182,66 @@ impl TryFrom<SearchHitItem<dto::SubjectDocument>> for SubjectEntity {
             _id: res._id,
             _source: res._source,
         })
+    }
+}
+
+impl From<AggregationResponse<dto::SubjectSearchTermsAgg>> for SubjectSearchTermsEntity {
+    fn from(res: AggregationResponse<dto::SubjectSearchTermsAgg>) -> Self {
+        SubjectSearchTermsEntity {
+            categories: res
+                .aggregations
+                .categories
+                .buckets
+                .into_iter()
+                .map(|faculty| {
+                    (
+                        faculty.key,
+                        faculty
+                            .sub_aggs
+                            .fields
+                            .buckets
+                            .into_iter()
+                            .map(|field| {
+                                (
+                                    field.key,
+                                    field
+                                        .sub_aggs
+                                        .programs
+                                        .buckets
+                                        .into_iter()
+                                        .map(|program| {
+                                            (
+                                                program.key,
+                                                program
+                                                    .sub_aggs
+                                                    .categories
+                                                    .buckets
+                                                    .into_iter()
+                                                    .map(|category| category.key)
+                                                    .collect(),
+                                            )
+                                        })
+                                        .collect(),
+                                )
+                            })
+                            .collect(),
+                    )
+                })
+                .collect(),
+            semesters: res
+                .aggregations
+                .semesters
+                .buckets
+                .into_iter()
+                .map(|b| b.key)
+                .collect(),
+            years: res
+                .aggregations
+                .years
+                .buckets
+                .into_iter()
+                .map(|b| b.key)
+                .collect(),
+        }
     }
 }

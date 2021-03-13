@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::utils::elasticsearch::AggregationBucket;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SubjectClassPlanDoc {
     pub topic: String,
@@ -85,4 +87,26 @@ pub struct SubjectDocument {
     #[serde(rename = "class")]
     pub class_name: Option<String>,
     pub goal: Option<SubjectGoalDoc>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SubjectCategoriesAgg {
+    pub categories: AggregationBucket<String, ()>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SubjectProgramsAgg {
+    pub programs: AggregationBucket<String, SubjectCategoriesAgg>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SubjectFieldsAgg {
+    pub fields: AggregationBucket<String, SubjectProgramsAgg>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct SubjectSearchTermsAgg {
+    pub categories: AggregationBucket<String, SubjectFieldsAgg>,
+    pub semesters: AggregationBucket<String, ()>,
+    pub years: AggregationBucket<i32, ()>,
 }

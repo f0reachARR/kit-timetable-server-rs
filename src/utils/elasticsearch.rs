@@ -32,3 +32,21 @@ pub struct SearchResponse<T> {
     pub timed_out: bool,
     pub hits: SourceHits<T>,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AggregationResponse<T> {
+    pub aggregations: T,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AggregationBucket<K, Sub> {
+    pub buckets: Vec<AggregationBucketItem<K, Sub>>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AggregationBucketItem<K, Sub> {
+    pub key: K,
+    pub doc_count: i32,
+    #[serde(flatten)]
+    pub sub_aggs: Sub,
+}
