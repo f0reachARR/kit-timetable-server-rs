@@ -150,7 +150,7 @@ async fn test_search_2() {
 }
 
 #[tokio::test]
-async fn test_search_count_over() {
+async fn test_get_terms() {
     let mut mock_repo = MockSubjectRepository::new();
 
     mock_repo
@@ -169,7 +169,7 @@ async fn test_search_count_over() {
 }
 
 #[tokio::test]
-async fn test_get_terms() {
+async fn test_search_count_over() {
     let mock_repo = MockSubjectRepository::new();
     let usecase: Arc<dyn SubjectUsecase> = Arc::new(SubjectInteractor::new(Arc::new(mock_repo)));
 
