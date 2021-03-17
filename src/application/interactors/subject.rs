@@ -6,7 +6,7 @@ use crate::{
         usecases,
         usecases::{SubjectSearchParameter, SubjectSearchResult, SubjectUsecase},
     },
-    domain::entities::SubjectEntity,
+    domain::entities::{SubjectEntity, SubjectSearchTermsEntity},
 };
 
 pub struct SubjectInteractor {
@@ -70,6 +70,41 @@ impl SubjectUsecase for SubjectInteractor {
     ) -> Result<crate::domain::entities::SubjectSearchTermsEntity, anyhow::Error> {
         let entity = self.subject_repository.get_terms().await?;
         // Only meaningful terms
-        Ok(entity)
+        Ok(SubjectSearchTermsEntity {
+            years: entity.years,
+            semesters: entity.semesters,
+            categories: entity
+                .categories
+                .into_iter()
+                .filter(|(name, _)| name != "")
+                .map(|(name, value)| {
+                    (
+                        name,
+                        value
+                            .into_iter()
+                            .filter(|(name, _)| name != "")
+                            .map(|(name, value)| {
+                                (
+                                    name,
+                                    value
+                                        .into_iter()
+                                        .filter(|(name, _)| name != "")
+                                        .map(|(name, value)| {
+                                            (
+                                                name,
+                                                value
+                                                    .into_iter()
+                                                    .filter(|name| name != "")
+                                                    .collect(),
+                                            )
+                                        })
+                                        .collect(),
+                                )
+                            })
+                            .collect(),
+                    )
+                })
+                .collect(),
+        })
     }
 }
