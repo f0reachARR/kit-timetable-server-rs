@@ -102,3 +102,25 @@ fn test_search_result() {
 
     assert_eq!(actual, expected);
 }
+
+#[test]
+fn test_search_terms() {
+    let actual =
+        GqlSubjectSearchTerms::from_entity(subject_td::get_subject_search_terms_test_data());
+    let expected = GqlSubjectSearchTerms {
+        years: vec![1, 2, 3],
+        semesters: vec!["s1".to_string(), "s2".to_string()],
+        faculties: vec![GqlSubjectSearchTermsFaculty {
+            name: "f1".to_string(),
+            fields: vec![GqlSubjectSearchTermsField {
+                name: "f2".to_string(),
+                programs: vec![GqlSubjectSearchTermsProgram {
+                    name: "p".to_string(),
+                    categories: vec!["c1".to_string(), "c2".to_string()],
+                }],
+            }],
+        }],
+    };
+
+    assert_eq!(actual, expected);
+}

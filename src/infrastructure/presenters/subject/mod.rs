@@ -12,7 +12,7 @@ use crate::{
             SubjectCategory, SubjectClassPlan, SubjectFlag, SubjectGoal, SubjectGoalEvaluation,
             SubjectInstructor, SubjectSchedule,
         },
-        SubjectEntity,
+        SubjectEntity, SubjectSearchTermsEntity,
     },
 };
 pub use dto::{GqlSubjectDto, GqlSubjectSearchResult};
@@ -143,5 +143,35 @@ pub fn convert_search_result(input: usecases::SubjectSearchResult) -> GqlSubject
     GqlSubjectSearchResult {
         count: input.count,
         items: input.subjects.into_iter().map(from_entity).collect(),
+    }
+}
+
+pub use dto::GqlSubjectSearchTerms;
+impl dto::GqlSubjectSearchTerms {
+    pub fn from_entity(entity: SubjectSearchTermsEntity) -> Self {
+        Self {
+            years: entity.years,
+            semesters: entity.semesters,
+            faculties: entity
+                .categories
+                .into_iter()
+                .map(|(name, value)| dto::GqlSubjectSearchTermsFaculty {
+                    name,
+                    fields: value
+                        .into_iter()
+                        .map(|(name, value)| dto::GqlSubjectSearchTermsField {
+                            name,
+                            programs: value
+                                .into_iter()
+                                .map(|(name, value)| dto::GqlSubjectSearchTermsProgram {
+                                    name,
+                                    categories: value,
+                                })
+                                .collect(),
+                        })
+                        .collect(),
+                })
+                .collect(),
+        }
     }
 }

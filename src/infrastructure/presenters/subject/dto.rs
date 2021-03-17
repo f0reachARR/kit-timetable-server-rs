@@ -110,3 +110,28 @@ pub struct GqlSubjectSearchResult {
     pub count: u32,
     pub items: Vec<GqlSubjectDto>,
 }
+
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
+pub struct GqlSubjectSearchTermsProgram {
+    pub name: String,
+    pub categories: Vec<String>,
+}
+
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
+pub struct GqlSubjectSearchTermsField {
+    pub name: String,
+    pub programs: Vec<GqlSubjectSearchTermsProgram>,
+}
+
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
+pub struct GqlSubjectSearchTermsFaculty {
+    pub name: String,
+    pub fields: Vec<GqlSubjectSearchTermsField>,
+}
+
+#[derive(Debug, PartialEq, Eq, SimpleObject)]
+pub struct GqlSubjectSearchTerms {
+    pub years: Vec<i32>,
+    pub semesters: Vec<String>,
+    pub faculties: Vec<GqlSubjectSearchTermsFaculty>,
+}

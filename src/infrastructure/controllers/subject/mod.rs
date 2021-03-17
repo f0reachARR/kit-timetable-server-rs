@@ -25,3 +25,11 @@ pub async fn search(
     let dto = subject::convert_search_result(result);
     Ok(dto)
 }
+
+pub async fn search_terms(
+    container: &UsecaseContainer,
+) -> async_graphql::Result<subject::GqlSubjectSearchTerms> {
+    let entity = container.subject_usecase.get_terms().await?;
+    let dto = subject::GqlSubjectSearchTerms::from_entity(entity);
+    Ok(dto)
+}
