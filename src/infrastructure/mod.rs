@@ -13,6 +13,7 @@ pub mod presenters {
 }
 
 pub mod frameworks {
+    pub mod config;
     mod container;
     pub mod graphql;
     pub use container::UsecaseContainer;
