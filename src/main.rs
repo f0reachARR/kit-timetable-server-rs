@@ -10,25 +10,28 @@ extern crate futures;
 extern crate serde_json;
 extern crate warp;
 
-use std::sync::Arc;
-
 use application::{
     interactors::SubjectInteractor, repositories::SubjectRepository, usecases::SubjectUsecase,
 };
 use elasticsearch::http::transport::Transport;
 use elasticsearch::Elasticsearch;
+use envconfig::Envconfig;
 use infrastructure::{
-    frameworks::{graphql::start_graphql, UsecaseContainer},
+    frameworks::{config::AppConfig, graphql::start_graphql, UsecaseContainer},
     gateways::SubjectGateway,
 };
+use std::sync::Arc;
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
-    let transport = Transport::single_node("http://10.0.0.2:9200")?;
+    dotenv::dotenv().ok();
+
+    let config: AppConfig = AppConfig::init_from_env()?;
+    let transport = Transport::single_node(config.elasticsearch_url.as_str())?;
     let es = Arc::new(Elasticsearch::new(transport));
     let subject_repository: Arc<dyn SubjectRepository> = Arc::new(SubjectGateway::new(
         Arc::clone(&es),
-        "kittimetable_subjects",
+        config.elasticsearch_subject_index.as_str(),
     ));
     let subject_usecase: Arc<dyn SubjectUsecase> =
         Arc::new(SubjectInteractor::new(Arc::clone(&subject_repository)));
