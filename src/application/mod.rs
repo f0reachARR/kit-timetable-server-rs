@@ -1,7 +1,9 @@
 pub mod repositories {
     pub mod subject;
+    pub mod user;
 
     pub use subject::*;
+    pub use user::*;
 }
 
 pub mod usecases {
