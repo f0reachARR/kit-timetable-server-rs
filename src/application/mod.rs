@@ -8,8 +8,10 @@ pub mod repositories {
 
 pub mod usecases {
     mod subject;
+    mod user;
 
     pub use subject::*;
+    pub use user::*;
 }
 
 pub mod interactors {
