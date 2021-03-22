@@ -16,10 +16,10 @@ mod extend;
 #[cfg(test)]
 mod extend_test;
 
-pub struct SubjectGateway<'a>(Arc<Elasticsearch>, &'a str);
+pub struct SubjectGateway(Arc<Elasticsearch>, String);
 
-impl<'a> SubjectGateway<'a> {
-    pub fn new(client: Arc<Elasticsearch>, index: &'a str) -> SubjectGateway<'a> {
+impl SubjectGateway {
+    pub fn new(client: Arc<Elasticsearch>, index: String) -> SubjectGateway {
         SubjectGateway(client, index)
     }
 }
@@ -34,7 +34,7 @@ macro_rules! push_terms {
     };
 }
 
-impl<'a> SubjectGateway<'a> {
+impl SubjectGateway {
     fn build_query_must<'b>(input: &'b subject::SubjectSearchInput<'b>) -> serde_json::Value {
         let mut must = Vec::<Value>::new();
 
@@ -99,11 +99,11 @@ impl<'a> SubjectGateway<'a> {
 }
 
 #[async_trait::async_trait]
-impl<'a> SubjectRepository for SubjectGateway<'a> {
+impl SubjectRepository for SubjectGateway {
     async fn get_by_id(&self, id: u32) -> Result<SubjectEntity, anyhow::Error> {
         let res = self
             .0
-            .get(GetParts::IndexId(self.1, id.to_string().as_str()))
+            .get(GetParts::IndexId(&self.1, id.to_string().as_str()))
             .send()
             .await?;
         let doc = res.json::<GetResponse<SubjectDocument>>().await?;
@@ -117,7 +117,7 @@ impl<'a> SubjectRepository for SubjectGateway<'a> {
     ) -> Result<subject::SubjectSearchOutput, anyhow::Error> {
         let res = self
             .0
-            .search(SearchParts::Index(&[self.1]))
+            .search(SearchParts::Index(&[&self.1]))
             .body(json!({
                 "query": {
                     "bool": {
@@ -145,7 +145,7 @@ impl<'a> SubjectRepository for SubjectGateway<'a> {
     async fn get_terms(&self) -> Result<SubjectSearchTermsEntity, anyhow::Error> {
         let res = self
             .0
-            .search(SearchParts::Index(&[self.1]))
+            .search(SearchParts::Index(&[&self.1]))
             .body(json!({
                 "aggs": {
                     "categories": {

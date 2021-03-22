@@ -26,13 +26,13 @@ use std::sync::Arc;
 async fn main() -> Result<(), anyhow::Error> {
     dotenv::dotenv().ok();
 
-    let config: AppConfig = AppConfig::init_from_env()?;
-    let transport = Transport::single_node(config.elasticsearch_url.as_str())?;
+    let config: Arc<AppConfig> = Arc::new(AppConfig::init_from_env()?);
+
+    let transport = Transport::single_node(&config.elasticsearch_url)?;
     let es = Arc::new(Elasticsearch::new(transport));
-    let subject_repository: Arc<dyn SubjectRepository> = Arc::new(SubjectGateway::new(
-        Arc::clone(&es),
-        config.elasticsearch_subject_index.as_str(),
-    ));
+    let subject_gateway =
+        SubjectGateway::new(es.clone(), config.elasticsearch_subject_index.clone());
+    let subject_repository: Arc<dyn SubjectRepository> = Arc::new(subject_gateway);
     let subject_usecase: Arc<dyn SubjectUsecase> =
         Arc::new(SubjectInteractor::new(Arc::clone(&subject_repository)));
 
