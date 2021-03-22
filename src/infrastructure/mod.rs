@@ -12,6 +12,7 @@ pub mod controllers {
 
 pub mod presenters {
     pub mod subject;
+    pub mod user;
 }
 
 pub mod frameworks {
