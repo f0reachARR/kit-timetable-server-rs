@@ -1,7 +1,9 @@
 pub mod gateways {
     mod subject;
+    mod user;
 
     pub use subject::SubjectGateway;
+    pub use user::UserGateway;
 }
 
 pub mod controllers {
