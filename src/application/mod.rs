@@ -20,4 +20,10 @@ pub mod interactors {
     mod subject_test;
 
     pub use subject::SubjectInteractor;
+
+    mod user;
+    #[cfg(test)]
+    mod user_test;
+
+    pub use user::UserInteractor;
 }
