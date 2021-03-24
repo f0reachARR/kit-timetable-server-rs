@@ -90,10 +90,13 @@ pub struct SubjectEntity {
 
 #[derive(Debug, PartialEq)]
 pub struct SubjectSearchTermsEntity {
-    pub categories: HashMap<
+    pub categories: Vec<(
         String, /* faculty */
-        HashMap<String /* field */, HashMap<String /* program */, Vec<String /* category */>>>,
-    >,
+        Vec<(
+            String, /* field */
+            Vec<(String /* program */, Vec<String /* category */>)>,
+        )>,
+    )>,
     pub semesters: Vec<String>,
     pub years: Vec<i32>,
 }

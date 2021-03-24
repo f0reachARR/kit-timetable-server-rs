@@ -151,25 +151,29 @@ impl SubjectRepository for SubjectGateway {
                     "categories": {
                         "terms": {
                             "field": "categories.faculty",
-                            "size": 50
+                            "size": 50,
+                            "order": { "_count" : "desc" }
                         },
                         "aggs": {
                             "fields": {
                                 "terms": {
                                     "field": "categories.field",
-                                    "size": 50
+                                    "size": 50,
+                                    "order": { "_count" : "desc" }
                                 },
                                 "aggs": {
                                     "programs": {
                                         "terms": {
                                             "field": "categories.program",
-                                            "size": 50
+                                            "size": 50,
+                                            "order": { "_count" : "desc" }
                                         },
                                         "aggs": {
                                             "categories": {
                                                 "terms": {
                                                     "field": "categories.category",
-                                                    "size": 50
+                                                    "size": 50,
+                                                    "order": { "_count" : "desc" }
                                                 }
                                             }
                                         }
@@ -181,13 +185,15 @@ impl SubjectRepository for SubjectGateway {
                     "semesters": {
                         "terms": {
                             "field": "categories.semester",
-                            "size": 50
+                            "size": 50,
+                            "order": { "_term" : "desc" }
                         }
                     },
                     "years": {
                         "terms": {
                             "field": "categories.year",
-                            "size": 50
+                            "size": 50,
+                            "order": { "_term" : "desc" }
                         }
                     }
                 },
