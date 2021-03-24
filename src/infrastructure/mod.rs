@@ -7,6 +7,7 @@ pub mod gateways {
 }
 
 pub mod controllers {
+    pub mod request;
     pub mod subject;
 }
 
@@ -19,5 +20,5 @@ pub mod frameworks {
     pub mod config;
     mod container;
     pub mod graphql;
-    pub use container::UsecaseContainer;
+    pub use container::*;
 }

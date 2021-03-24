@@ -11,9 +11,9 @@ extern crate serde_json;
 extern crate warp;
 
 use application::{
-    interactors::SubjectInteractor,
+    interactors::{SubjectInteractor, UserInteractor},
     repositories::{SubjectRepository, UserRepository},
-    usecases::SubjectUsecase,
+    usecases::{SubjectUsecase, UserUsecase},
 };
 use elasticsearch::http::transport::Transport;
 use elasticsearch::Elasticsearch;
@@ -43,11 +43,13 @@ async fn main() -> Result<(), anyhow::Error> {
     ));
 
     let subject_usecase: Arc<dyn SubjectUsecase> =
-        Arc::new(SubjectInteractor::new(Arc::clone(&subject_repository)));
+        Arc::new(SubjectInteractor::new(subject_repository.clone()));
+    let user_usecase: Arc<dyn UserUsecase> = Arc::new(UserInteractor::new(user_repository.clone()));
 
-    let context = UsecaseContainer {
-        subject_usecase: Arc::clone(&subject_usecase),
-    };
+    let context = Arc::new(UsecaseContainer {
+        subject_usecase: subject_usecase.clone(),
+        user_usecase: user_usecase.clone(),
+    });
 
     start_graphql(context).await;
 

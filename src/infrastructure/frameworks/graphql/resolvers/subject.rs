@@ -1,6 +1,6 @@
-use async_graphql::{Context, Object};
-
 use crate::infrastructure::{controllers, frameworks::UsecaseContainer, presenters};
+use async_graphql::{Context, Object};
+use std::sync::Arc;
 
 #[derive(Default)]
 pub struct SubjectQueryRoot;
@@ -12,7 +12,7 @@ impl SubjectQueryRoot {
         ctx: &Context<'_>,
         id: u32,
     ) -> async_graphql::Result<presenters::subject::GqlSubjectDto> {
-        let container = ctx.data::<UsecaseContainer>()?;
+        let container = ctx.data::<Arc<UsecaseContainer>>()?;
         Ok(controllers::subject::get_by_id(container, id).await?)
     }
 
@@ -23,7 +23,7 @@ impl SubjectQueryRoot {
         count: u32,
         query: controllers::subject::GqlSubjectSearchInput,
     ) -> async_graphql::Result<presenters::subject::GqlSubjectSearchResult> {
-        let container = ctx.data::<UsecaseContainer>()?;
+        let container = ctx.data::<Arc<UsecaseContainer>>()?;
         Ok(controllers::subject::search(container, from, count, query).await?)
     }
 
@@ -31,7 +31,7 @@ impl SubjectQueryRoot {
         &self,
         ctx: &Context<'_>,
     ) -> async_graphql::Result<presenters::subject::GqlSubjectSearchTerms> {
-        let container = ctx.data::<UsecaseContainer>()?;
+        let container = ctx.data::<Arc<UsecaseContainer>>()?;
         Ok(controllers::subject::search_terms(container).await?)
     }
 }
