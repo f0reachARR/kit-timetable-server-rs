@@ -9,6 +9,7 @@ pub mod gateways {
 pub mod controllers {
     pub mod request;
     pub mod subject;
+    pub mod user;
 }
 
 pub mod presenters {
